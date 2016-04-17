@@ -1,0 +1,47 @@
+
+  .bg-1 { 
+  	background-color: #1abc9c; /* Green */
+    color: #ffffff;
+  }
+
+  .slice text {
+  	font-size: 16pt;
+    font-family: Arial;
+   }
+
+  .frame {
+  	display: block;
+  	width: 100vw;
+  	height: 100vh;
+  	max-width: 100%;
+  	margin: 0;
+  	padding: 0;
+  	border: 0 none;
+  	box-sizing: border-box;
+  }	
+
+  .slice text {
+    font-size: 16pt;
+	font-family: Arial;
+   }
+
+   .chart rect {
+	fill: steelblue;   
+   }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .axis text {
+    font-size: 12px;
+  }
+
+  .chart .current {
+    fill: green;
+    cursor: pointer;
+  }
+

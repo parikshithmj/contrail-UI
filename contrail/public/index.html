@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="description" content ="This Dashboard represents the statistics and information about Data flow between 2 virtual nodes"/>
+    <title>Contrail</title>
+</head>
+<body>
+    <div class="container-fluid bg-1 text-center">
+        <h1>Traffic Flow Dashboard</h1>
+    </div>
+    <div class="container">
+        <ul class="nav nav-pills nav-stacked col-md-2">
+            <li class="active"><a href="#tab_a" data-toggle="pill" title = "All data under one roof">OverAll Data</a></li>
+            <li><a href="#tab_b" data-toggle="pill" title = "Get All the Statistics">Stats</a></li>
+            <li><a href="#tab_c" data-toggle="pill" title = "Search based on TimeStamp">Query by TimeStamp</a></li>
+			<li><a href="#tab_e" data-toggle="pill" title = "Query from the Database">DB Query</a></li>
+            <li><a href="#tab_d" data-toggle="pill" title = "Other Search Options">Advanced Search</a></li>
+        </ul>
+
+        <div class="tab-content col-md-10">
+            <div class="tab-pane active" id="tab_a">
+                <table class="table table-hover table-striped">
+                    <thead>
+     			 <tr class="info">
+                            <th>TimeStamp</th>
+                            <th>Destination IP</th>
+                            <th>Destination VN</th>
+                            <th>Direction Ingress</th>
+                            <th>Protocol</th>
+                            <th>Source Ip </th>
+                            <th>Source VN</th>
+                            <th>Source Port</th>
+                            <th>Sum Bytes kb</th>
+                            <th>Sum Packets</th>
+                        </tr>
+                    </thead>
+                    <tbody class="traffic-list"></tbody>
+                </table>
+
+                <script type="text/template" class="traffic-list-template">
+                    <td>
+                        <%= convertToDate(timestamp) %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= destination_ip %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= destination_vn %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= direction_ingress %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= protocol%>
+                            </span>
+                    </td>
+                    <td>
+                        <%= source_ip %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= source_vn %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= source_port %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= sum_bytes_kb %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= sum_packets %>
+                            </span>
+                    </td>
+                </script>
+            </div>
+
+            <div class="tab-pane" id="tab_b" >
+               <iframe src="stats.html"  class= "frame" allowfullscreen frameborder="0">
+			   </iframe>
+            </div>
+            <div class="tab-pane" id="tab_c">
+                <h4>Search by TimeStamp</h4>
+
+
+<div class="container">
+    <div class='col-md-5'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker1'>
+                <input id='date1' type='text' class="form-control"/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-5'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker2'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+        $(function () {
+            $('#datetimepicker1').datetimepicker();
+            $('#datetimepicker2').datetimepicker({
+                useCurrent: false 
+            });
+            $("#datetimepicker1").on("dp.change", function (e) {
+		console.log("111");
+                $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+            });
+            $("#datetimepicker2").on("dp.change", function (e) {
+		console.log("222");
+                $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+    });
+</script>
+
+
+	<button type="button" class="btn btn-primary btn-lg btn-block" data-bind="click: getTrafficByTimeStamp">Search!</button><br>
+	<table class="table table-hover table-striped">
+    <thead>
+        <tr class="info">
+            <th>TimeStamp</th>
+            <th>Destination IP</th>
+            <th>Destination VN</th>
+            <th>Direction Ingress</th>
+            <th>Protocol</th>
+            <th>Source Ip </th>
+            <th>Source VN</th>
+            <th>Source Port</th>
+            <th>Sum Bytes kb</th>
+            <th>Sum Packets</th>                                                                                                    
+       </tr>
+    </thead>
+    <tbody data-bind="foreach: trafficListByTime ">
+        <tr>
+            <td data-bind="text: timestamp "></td>
+            <td data-bind="text: destination_ip "></td>
+            <td data-bind="text: destination_vn "></td>
+            <td data-bind="text: direction_ingress "></td>                              
+            <td data-bind="text: protocol "></td>                               
+            <td data-bind="text: source_ip "></td>                              
+            <td data-bind="text: source_vn "></td>
+            <td data-bind="text: source_port "></td>  
+            <td data-bind="text: sum_bytes_kb "></td> 
+            <td data-bind="text: sum_packets"></td>                                    
+        </tr>
+    </tbody>
+</table>
+
+            </div>
+			
+	   <div class="tab-pane" id="tab_e">
+       <h2>DB Query</h2>
+	   <h4>Select The Fields Required</h4>	   
+       <select class = "form-control" id = "timestamp">
+       <option selected> </option>
+       <option >timestamp </option>       
+       </select></br>
+	   <select class = "form-control" id = "dest_ip">
+       <option selected> </option>
+       <option>destination_ip </option>       
+       </select></br>
+		<select class = "form-control" id = "dest_port">
+       <option selected> </option>
+       <option>destination_port</option>       
+       </select></br>
+	   <select class = "form-control" id = "dest_vn">
+       <option selected> </option>
+       <option>destination_vn </option>       
+       </select></br>
+	   <select class = "form-control" id = "src_ip">
+       <option selected> </option>
+       <option>source_ip</option>       
+       </select></br>
+		<select class = "form-control" id = "src_port">
+       <option selected> </option>
+       <option>source_port</option>       
+       </select></br>
+	   <select class = "form-control" id = "src_vn">
+       <option selected></option>
+       <option>source_vn</option>       
+       </select></br>
+	   <select class = "form-control" id = "prot">
+       <option selected></option>
+       <option>protocol</option>       
+       </select></br>
+		<select class = "form-control" id = "sumKb">
+       <option selected></option>
+       <option>sum_bytes_kb</option>       
+       </select></br>
+	  <select class = "form-control" id = "sumPack">
+       <option selected></option>
+       <option>sum_packets</option>       
+       </select></br>
+ 	   <select class = "form-control" id = "dir_ingress">
+       <option selected></option>
+       <option>dir_ingress</option>       
+       </select></br>
+	   <h4>WHERE</h4></br>	   
+       <input type = "text" class = "form-control" id = "where" placeholder = "Enter WHERE CLAUSE"></br>                                                                                           
+        <button type="button" class="btn btn-primary btn-lg btn-block" data-bind="click: getQuery">Search!</button><br>
+		<table class="table table-hover table-striped">
+    	<tbody class = "tbody" data-bind="foreach: resultList" >
+        <tr>
+	
+			<!-- 
+            <td data-bind="text: timestamp"></td>
+            <td data-bind="text: destination_ip"></td>
+            <td data-bind="text: destination_vn"></td>
+            <td data-bind="text: direction_ingress"></td>                              
+            <td data-bind="text: protocol"></td>                               
+            <td data-bind="text: source_ip"></td>                              
+            <td data-bind="text: source_vn"></td>
+            <td data-bind="text: source_port"></td>  
+            <td data-bind="text: sum_bytes_kb"></td> 
+            <td data-bind="text: sum_packets"></td>
+		   -->
+		  	
+        </tr>
+    </tbody>
+</table>
+            </div>		
+			
+			
+       <div class="tab-pane" id="tab_d">
+       <h4>Advanced Search- Optional Fields</h4>
+       <select class = "form-control" id = "protocol">
+       <option>Protocol : 1</option>
+       <option selected>Protocol : 2</option>
+       <option>Protocol : 3</option>
+       <option>Protocol : 4</option>
+       <option>Protocol : 5</option>
+       <option>Protocol : 6</option>        
+       </select></br>                                     
+       <input type = "text" class = "form-control" id = "destination_ip" placeholder = "Enter Destination IP"></br>
+       <input type = "text" class = "form-control" id = "source_ip" placeholder = "Enter Source IP"></br>                                                                                            
+        <button type="button" class="btn btn-primary btn-lg btn-block" data-bind="click: getTraffic">Search!</button><br>
+		<table class="table table-hover table-striped">
+    <thead>
+        <tr class="info">
+            <th>TimeStamp</th>
+            <th>Destination IP</th>
+            <th>Destination VN</th>
+            <th>Direction Ingress</th>
+            <th>Protocol</th>
+            <th>Source Ip </th>
+            <th>Source VN</th>
+            <th>Source Port</th>
+            <th>Sum Bytes kb</th>
+            <th>Sum Packets</th>                                                                                                    
+       </tr>
+    </thead>
+    <tbody data-bind="foreach: trafficList">
+        <tr>
+            <td data-bind="text: timestamp "></td>
+            <td data-bind="text: destination_ip "></td>
+            <td data-bind="text: destination_vn "></td>
+            <td data-bind="text: direction_ingress "></td>                              
+            <td data-bind="text: protocol "></td>                               
+            <td data-bind="text: source_ip "></td>                              
+            <td data-bind="text: source_vn "></td>
+            <td data-bind="text: source_port "></td>  
+            <td data-bind="text: sum_bytes_kb "></td> 
+            <td data-bind="text: sum_packets"></td>                                    
+        </tr>
+    </tbody>
+</table>
+            </div>
+        </div>
+        <!-- tab content --> 	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>   
+    <script src="components/jquery/dist/jquery.js"></script>
+    <script src="components/underscore/underscore.js"></script>
+    <script src="components/backbone/backbone.js"></script>
+    <script src="js/scripts.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js "></script>
+	<script src="components/knockout.mapping-latest.js " type="text/javascript "></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="js/main.js"></script>
+</body>
+
+</html>

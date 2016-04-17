@@ -1,0 +1,27 @@
+CREATE TABLE Contrail (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+timestamp INT(14),
+destination_ip VARCHAR(30) NOT NULL,
+destination_port INT(8) NOT NULL,
+destination_vn VARCHAR(50),
+source_ip VARCHAR(30) NOT NULL,
+source_port INT(8) NOT NULL,
+source_vn VARCHAR(50),
+protocol INT(2),
+sum_bytes_kb INT(10),
+sum_packets INT(10)
+)
+
+
+INSERT INTO Contrail (timestamp, 
+destination_ip,
+destination_port ,
+destination_vn ,
+source_ip ,
+source_port ,
+source_vn ,
+protocol ,
+sum_bytes_kb ,
+sum_packets 
+)
+VALUES (1460665594, "10.2.1.3",9117, "project2:virtual-network1","10.3.1.3",41322,"project2:virtual-network3",2,11328,41000 );

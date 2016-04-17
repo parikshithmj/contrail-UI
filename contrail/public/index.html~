@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="" bower_components/bootstrap/dist/css/style.css ">
+
+	<meta charset="UTF-8 ">
+      <meta name="viewport " content="width=device-width, initial-scale=1 ">
+    <title>Contrail</title>
+</head>
+<style>
+  .bg-1 { 
+      background-color: #1abc9c; /* Green */
+      color: #ffffff;
+  }
+</style>
+<body>
+    <div class="container-fluid bg-1 text-center ">
+        <h1>Traffic Flow Dashboard</h1>
+    </div>
+    <div class="container ">
+        <ul class="nav nav-pills nav-stacked col-md-2 ">
+            <li class="active "><a href="#tab_a " data-toggle="pill " title = "All data under one roof ">OverAll Data</a></li>
+            <li><a href="#tab_b " data-toggle="pill " title = "Get All the Statistics ">Stats</a></li>
+            <li><a href="#tab_c " data-toggle="pill " title = "Search based on TimeStamp ">Query by TimeStamp</a></li>
+            <li><a href="#tab_d " data-toggle="pill " title = "Other Search Options ">Advanced Search</a></li>
+        </ul>
+
+        <div class="tab-content col-md-10 ">
+            <div class="tab-pane active " id="tab_a ">
+                <table class="table table-hover table-striped ">
+                    <thead>
+     			 <tr class="info ">
+                            <th>TimeStamp</th>
+                            <th>Destination IP</th>
+                            <th>Destination VN</th>
+                            <th>Direction Ingress</th>
+                            <th>Protocol</th>
+                            <th>Source Ip </th>
+                            <th>Source VN</th>
+                            <th>Source Port</th>
+                            <th>Sum Bytes kb</th>
+                            <th>Sum Packets</th>
+                        </tr>
+                    </thead>
+                    <tbody class="blogs-list "></tbody>
+                </table>
+
+                <script type="text/template " class="traffic-list-template ">
+                    <td>
+                        <%= convertToDate(timestamp) %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= destination_ip %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= destination_vn %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= direction_ingress %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= protocol%>
+                            </span>
+                    </td>
+                    <td>
+                        <%= source_ip %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= source_vn %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= source_port %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= sum_bytes_kb %>
+                            </span>
+                    </td>
+                    <td>
+                        <%= sum_packets %>
+                            </span>
+                    </td>
+                </script>
+            </div>
+
+            <div class="tab-pane " id="tab_b ">
+                <h4>Pane B</h4>
+                <p>Tab 2</p>
+            </div>
+            <div class="tab-pane " id="tab_c ">
+                <h4>Pane C</h4>
+                <p>Tab 3</p>
+            </div>
+            <div class="tab-pane " id="tab_d ">
+
+                <h4>Pane D</h4>
+                <p>tab 4</p>		
+
+            </div>
+        </div>
+        <!-- tab content -->
+	
+	<script>
+	function convertToDate(timestamp){
+	var date = new Date(timestamp*1000);
+	//Get date of the week
+	var dateWeek = date.getDate();
+	//Get month 
+	var month = date.getMonth();
+	// Hours part from the timestamp
+	var hours = date.getHours();
+	// Minutes part from the timestamp
+	var minutes = "0 " + date.getMinutes();
+	// Seconds part from the timestamp
+	var seconds = "0 " + date.getSeconds();
+	// Will display time in 10:30:23 format
+	var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2) + " ( " +month + "/ " + dateWeek + ") ";
+	return formattedTime;	
+	}
+	</script>
+	
+
+	<script src="bower_components/jquery/dist/jquery.js "></script>
+        <script src="bower_components/underscore/underscore.js "></script>
+        <script src="bower_components/backbone/backbone.js "></script>
+        <script src="js/scripts.js "></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/js/bootstrap.min.js "></script>
+	
+       
+</body>
+
+</html>

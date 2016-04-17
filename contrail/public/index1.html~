@@ -1,0 +1,316 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+
+        <link rel="stylesheet" type="text/css" href=""bower_components/bootstrap/dist/css/style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+            <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Contrail</title>
+    </head>
+    <style>
+      .bg-1 { 
+          background-color: #1abc9c; /* Green */
+          color: #ffffff;
+      }
+    </style>
+    <body>
+        <div class="container-fluid bg-1 text-center">
+            <h1>Traffic Flow Dashboard</h1>
+        </div>
+        <div class="container">
+            <ul class="nav nav-pills nav-stacked col-md-2">
+                <li class="active"><a href="#tab_a" data-toggle="pill" title = "All data under one roof">OverAll Data</a></li>
+                <li><a href="#tab_b" data-toggle="pill" title = "Get All the Statistics">Stats</a></li>
+                <li><a href="#tab_c" data-toggle="pill" title = "Search based on TimeStamp">Query by TimeStamp</a></li>
+                <li><a href="#tab_d" data-toggle="pill" title = "Other Search Options">Advanced Search</a></li>
+            </ul>
+
+            <div class="tab-content col-md-10">
+                <div class="tab-pane active" id="tab_a">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                     <tr class="info">
+                                <th>TimeStamp</th>
+                                <th>Destination IP</th>
+                                <th>Destination VN</th>
+                                <th>Direction Ingress</th>
+                                <th>Protocol</th>
+                                <th>Source Ip </th>
+                                <th>Source VN</th>
+                                <th>Source Port</th>
+                                <th>Sum Bytes kb</th>
+                                <th>Sum Packets</th>
+                            </tr>
+                        </thead>
+                        <tbody class="blogs-list"></tbody>
+                    </table>
+
+                    <script type="text/template" class="traffic-list-template">
+                        <td>
+                            <%= convertToDate(timestamp) %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= destination_ip %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= destination_vn %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= direction_ingress %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= protocol%>
+                                </span>
+                        </td>
+                        <td>
+                            <%= source_ip %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= source_vn %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= source_port %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= sum_bytes_kb %>
+                                </span>
+                        </td>
+                        <td>
+                            <%= sum_packets %>
+                                </span>
+                        </td>
+                    </script>
+                </div>
+
+                <div class="tab-pane" id="tab_b">
+                    <h4>Pane B</h4>
+                    <p>Tab 2</p>
+                </div>
+                <div class="tab-pane" id="tab_c">
+                    <h4>Search by TimeStamp</h4>
+
+
+    <div class="container">
+        <div class='col-md-5'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input id='date1' type='text' class="form-control"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-5'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+                $('#datetimepicker2').datetimepicker({
+                    useCurrent: false //Important! See issue #1075
+                });
+                $("#datetimepicker1").on("dp.change", function (e) {
+            console.log("111");
+                    $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+                });
+                $("#datetimepicker2").on("dp.change", function (e) {
+            console.log("222");
+                    $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+                });
+            });
+        });
+    </script>
+
+
+        <button type="button" class="btn btn-primary btn-lg btn-block" data-bind="click: getTrafficByTimeStamp">Search!</button>
+        <br>                                                                                                      
+        <table class="table table-hover table-striped">
+        <thead>
+             <tr class = "info">
+                <th>TimeStamp</th>
+                <th>Destination IP</th>
+                <th>Destination VN</th>
+                <th>Direction Ingress</th>
+                <th>Protocol</th>
+                <th>Source Ip </th>
+                <th>Source VN</th>
+                <th>Source Port</th>
+                <th>Sum Bytes kb</th>
+                <th>Sum Packets</th>                                
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: trafficListByTime ">
+            <tr>
+                <td data-bind="text: timestamp "></td>
+                <td data-bind="text: destination_ip "></td>
+                <td data-bind="text: destination_vn "></td>
+                <td data-bind="text: direction_ingress "></td>
+                <td data-bind="text: protocol "></td>
+                <td data-bind="text: source_ip "></td>                               
+                <td data-bind="text: source_vn "></td>
+                <td data-bind="text: source_port "></td>                              
+                <td data-bind="text: sum_bytes_kb "></td>
+                <td data-bind="text:sum_packets"></td>                                    
+            </tr>
+        </tbody>
+    </table>
+    </div>
+                <div class="tab-pane" id="tab_d">
+                    <h4>Pane D</h4>
+            <input type="button" id="btnGetCustomers" value="Get Customers" data-bind="click: getTraffic ">
+             <br>                                                                                             
+            <table class="table table-hover table-striped">
+        <thead>
+            <tr class = "info">
+                <th>TimeStamp</th>
+                <th>Destination IP</th>
+                <th>Destination VN</th>
+                <th>Direction Ingress</th>
+                <th>Protocol</th>
+                <th>Source Ip </th>
+                <th>Source VN</th>
+                <th>Source Port</th>
+                <th>Sum Bytes kb</th>
+                <th>Sum Packets</th>                                
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: trafficList ">
+            <tr>
+                <td data-bind="text: timestamp "></td>
+                <td data-bind="text: destination_ip "></td>
+                <td data-bind="text: destination_vn "></td>
+                <td data-bind="text: direction_ingress "></td>                                     
+                <td data-bind="text: protocol "></td>
+                <td data-bind="text: source_ip "></td>                               
+                <td data-bind="text: source_vn "></td>
+                <td data-bind="text: source_port "></td>                              
+                <td data-bind="text: sum_bytes_kb "></td>
+                <td data-bind="text:sum_packets"></td>                                    
+            </tr>
+        </tbody>
+    </table>
+                </div>
+            </div>
+            <!-- tab content -->
+        <script>
+
+
+        function convertToDate(timestamp){
+        var date = new Date(timestamp*1000);
+        //Get date of the week
+        var dateWeek = date.getDate();
+        //Get month 
+        var month = date.getMonth();
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0 " + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0 " + date.getSeconds();
+        // Will display time in 10:30:23 format
+        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2) + " ( " +month + "/ " + dateWeek + ") ";
+        return formattedTime;	
+        }
+        </script>
+        <script>
+        function customerViewModel() {
+            var self = this;
+
+        self.trafficList = ko.observableArray();
+        self.trafficListByTime = ko.observableArray();
+        self.getTraffic = function () {
+            $.ajax({
+                type: 'GET',   
+                url: 'traffic?protocol=1',
+
+                success: function(data) {
+                    var observableData = ko.mapping.fromJS(data);
+
+                    var array = observableData();
+                    self.trafficList(array);
+                },
+                error:function(jq, st, error){
+                    alert(error);
+                }
+            });
+        };
+
+         self.getTrafficByTimeStamp = function () {
+        var date1 = new Date($('#date1').val());
+        date1 = date1.getTime()/1000;                                                                                                                     
+        $.ajax({
+                type: "GET",
+                url: 'traffic/timeRange/'+date1+"/"+date1,
+
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+            var observableData = ko.mapping.fromJS(data);
+            var array = observableData();
+                    self.trafficListByTime(array);
+                    console.log("yay"+data);
+                },
+                error: function (data) {
+                    console.log("no");
+                }
+            });
+
+        //getTrafficByTimeStampAjax(date);
+         }
+
+         function getTrafficByTimeStampAjax(date1){
+           date1 = date1.getTime()/1000;
+        console.log(date1);
+        $.ajax({
+                type: "GET",
+                url: 'traffic/timeRange/'+date1+"/"+date1,
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log("yay"+data);
+                },
+                error: function (data) {
+                    console.log("no");
+                }
+            });
+
+        }
+    }
+
+    $(document).ready(function () {
+        ko.applyBindings(new customerViewModel());
+    });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>   
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
+        <script src="bower_components/backbone/backbone.js"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js "></script>
+        <script src="bower_components/knockout.mapping-latest.js " type="text/javascript "></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+    </body>
+
+    </html>
